@@ -606,4 +606,5 @@ html[lang=en] .contact h2,html[lang=en] .section-content h2{word-break:normal;ov
   .viewport-deck .robot-marquee .robot-visual .robot-render-crop{inset:8px;width:calc(100% - 16px);height:calc(100% - 16px)}
 }
 .viewport-deck .robot-marquee .robot-visual .robot-render-crop.robot-render-face{inset:0;width:100%;height:100%}
-.viewport-deck .robot-marquee .robot-visual .robot-render-window{width:310px;height:270px;max-width:none;stroke:none;fill:none;overflow:hidden}
+.viewport-deck .robot-marquee .robot-visual .robot-render-window{width:540px;height:340px;max-width:none;stroke:none;fill:none;overflow:hidden}
+
