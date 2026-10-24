@@ -29,13 +29,14 @@ h1,h2,h3,h4,p{margin-top:0}
 .hero h1 .hero-rule:before{content:"";position:absolute;z-index:1;inset:0;background:#222222;transform-origin:left center}
 .hero h1 .hero-line-tracer{--tracer-width:52px;position:absolute;z-index:2;left:calc(100% - var(--tracer-width));top:50%;width:var(--tracer-width);max-width:none;height:var(--tracer-width);object-fit:contain;transform:translateY(-50%) rotate(90deg);pointer-events:none}
 .hero h1 .hero-line-tracer-return{left:calc(100% - var(--tracer-width))}
+.hero h1 .hero-tracer-entry{position:absolute;z-index:2;inset:0;clip-path:inset(-40px -40px -40px 0);pointer-events:none}
 .hero h1 .hero-infinity{--infinity-opacity:.16;position:absolute;z-index:0;left:50%;top:calc(50% - .015em);width:1.55em;width:calc(1cap * 512 / 230);max-width:none;height:auto;transform:translate(-50%,-50%);opacity:var(--infinity-opacity);mix-blend-mode:multiply;pointer-events:none}
 .hero h1>span:first-child{--entry-x:clamp(-40px,-3vw,-18px)}
 .hero h1>span:last-child{--entry-x:clamp(18px,3vw,40px);align-self:flex-end;gap:clamp(30px,4vw,62px);margin-top:clamp(12px,2.5vh,28px)}
 .hero h1.is-animated>span>span:not(.hero-rule){opacity:0;transform:translate3d(var(--entry-x),8px,0)}
 .hero h1.is-animated>span>.hero-rule:before{transform:scaleX(0)}
 .hero h1.is-animated>span:first-child .hero-line-tracer{left:0;opacity:0}
-.hero h1.is-animated>span:last-child .hero-line-tracer-return{left:0;opacity:0}
+.hero h1.is-animated>span:last-child .hero-line-tracer-return{left:calc(0px - var(--tracer-width) - 4px);opacity:0}
 .hero h1.is-animated>span:last-child .hero-infinity{opacity:0}
 .hero h1.is-animated.is-visible>span>span:not(.hero-rule){animation:hero-word-enter 1.05s cubic-bezier(.2,.75,.2,1) both}
 .hero h1.is-animated.is-visible>span:last-child>span:not(.hero-rule){animation-delay:.16s}
@@ -47,7 +48,7 @@ h1,h2,h3,h4,p{margin-top:0}
 @keyframes hero-word-enter{from{opacity:0;transform:translate3d(var(--entry-x),8px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
 @keyframes hero-track-draw{from{transform:scaleX(0)}90%,to{transform:scaleX(1)}}
 @keyframes hero-tracer-run{from{left:0;opacity:0}8%{opacity:1}90%{left:calc(100% + 4px);opacity:1}to{left:calc(100% + 4px);opacity:0}}
-@keyframes hero-tracer-return{from{left:0;opacity:0}8%{opacity:1}90%{left:calc(100% - var(--tracer-width)/2 - 4px);opacity:1}to{left:calc(100% - var(--tracer-width)/2 - 4px);opacity:0}}
+@keyframes hero-tracer-return{from{left:calc(0px - var(--tracer-width) - 4px);opacity:1}90%{left:calc(100% - var(--tracer-width)/2 - 4px);opacity:1}to{left:calc(100% - var(--tracer-width)/2 - 4px);opacity:0}}
 @keyframes hero-infinity-reveal{from{opacity:0}to{opacity:var(--infinity-opacity,.16)}}
 .hero-bottom{position:absolute;bottom:34px;left:clamp(24px,4.2vw,72px);right:clamp(24px,4.2vw,72px);align-items:end}
 .hero-bottom p{font-family:'Noto Sans KR',sans-serif;font-size:15px;line-height:1.65;font-weight:700;letter-spacing:-.045em;margin:0}
