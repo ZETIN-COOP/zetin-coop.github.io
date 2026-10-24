@@ -325,7 +325,7 @@ html.viewport-deck{
 .robot-marquee-group{display:flex;gap:24px;height:100%;flex:none}
 .viewport-deck .robot-marquee .robot-row{display:flex;flex:0 0 clamp(320px,32vw,520px);width:clamp(320px,32vw,520px);height:100%;min-height:0;flex-direction:column;background:var(--paper);color:var(--ink);border:0;overflow:hidden}
 .viewport-deck .robot-marquee .robot-visual{flex:1;min-height:100px;width:100%;height:auto;background:#303030;overflow:hidden}
-.viewport-deck .robot-marquee .robot-visual img{height:100%;width:100%;object-fit:cover;transform:none}
+.viewport-deck .robot-marquee .robot-visual img{height:100%;width:100%;object-fit:cover;transform:none;filter:none}
 .viewport-deck .robot-marquee .robot-details{flex:none;min-height:0;padding:22px 26px 24px;overflow:visible;background:var(--paper)}
 .viewport-deck .robot-marquee .robot-name h3{font-size:clamp(27px,3.1vw,46px);margin:0;line-height:1.12}
 .viewport-deck .robot-marquee .robot-name h3 small{font-size:12px;line-height:1.5;margin-top:6px}
@@ -597,11 +597,13 @@ html[lang=en] .contact h2,html[lang=en] .section-content h2{word-break:normal;ov
 /* Frame the supplied design renders in the requested compositions. */
 .viewport-deck .robot-marquee .robot-visual.robot-render{background:var(--paper)}
 .viewport-deck .robot-marquee .robot-visual.robot-render:after{display:none}
-.viewport-deck .robot-marquee .robot-visual.robot-render img{object-fit:contain;object-position:center;filter:grayscale(1);padding:12px}
-.viewport-deck .robot-marquee .robot-visual .robot-render-crop{position:absolute;inset:12px;width:calc(100% - 24px);height:calc(100% - 24px);max-width:none;fill:none;stroke:none;filter:grayscale(1);overflow:hidden}
+.viewport-deck .robot-marquee .robot-visual.robot-render img{object-fit:contain;object-position:center;filter:none;padding:12px}
+.viewport-deck .robot-marquee .robot-visual .robot-render-crop{position:absolute;inset:12px;width:calc(100% - 24px);height:calc(100% - 24px);max-width:none;fill:none;stroke:none;filter:none;overflow:hidden}
 .viewport-deck .robot-marquee .robot-visual.robot-render-sammy img{inset:auto;left:50%;top:50%;width:340%;height:134%;padding:0;object-fit:contain;object-position:center;transform:translate(-50%,-44%)}
 @media(max-height:500px) and (orientation:landscape){
   .viewport-deck .robot-marquee .robot-visual.robot-render img{padding:8px}
   .viewport-deck .robot-marquee .robot-visual.robot-render-sammy img{padding:0}
   .viewport-deck .robot-marquee .robot-visual .robot-render-crop{inset:8px;width:calc(100% - 16px);height:calc(100% - 16px)}
 }
+.viewport-deck .robot-marquee .robot-visual .robot-render-crop.robot-render-face{inset:0;width:100%;height:100%}
+.viewport-deck .robot-marquee .robot-visual .robot-render-window{width:310px;height:270px;max-width:none;stroke:none;fill:none;overflow:hidden}
