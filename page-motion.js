@@ -48,7 +48,8 @@
         region.tabIndex = 0;
         region.setAttribute('role', 'region');
         const heading = region.querySelector('h2,h3');
-        region.setAttribute('aria-label', heading ? heading.textContent.replace(/\s+/g, ' ').trim() + ' 자세히 읽기' : '로봇 프로젝트 상세 설명');
+        const english = root.lang === 'en';
+        region.setAttribute('aria-label', heading ? heading.textContent.replace(/\s+/g, ' ').trim() + (english ? ' — read more' : ' 자세히 읽기') : (english ? 'Robot project details' : '로봇 프로젝트 상세 설명'));
       } else {
         region.removeAttribute('tabindex');
         region.removeAttribute('role');
@@ -97,6 +98,7 @@
         if (index === closest) link.setAttribute('aria-current', 'location');
         else link.removeAttribute('aria-current');
       });
+      document.dispatchEvent(new Event('sectionchange'));
     }
   };
   const schedule = () => {

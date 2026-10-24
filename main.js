@@ -1,6 +1,7 @@
 const header = document.querySelector('.site-header');
 const menuButton = document.querySelector('.menu-button');
 const mobileNav = document.querySelector('.mobile-nav');
+const isEnglish = document.documentElement.lang === 'en';
 
 const updateHeader = () => header?.classList.toggle('scrolled', window.scrollY > 20);
 updateHeader();
@@ -9,7 +10,7 @@ window.addEventListener('scroll', updateHeader, { passive: true });
 if (menuButton && mobileNav) {
   const closeMenu = () => {
     menuButton.setAttribute('aria-expanded', 'false');
-    menuButton.setAttribute('aria-label', '메뉴 열기');
+    menuButton.setAttribute('aria-label', isEnglish ? 'Open menu' : '메뉴 열기');
     mobileNav.hidden = true;
     document.body.classList.remove('menu-open');
   };
@@ -17,14 +18,14 @@ if (menuButton && mobileNav) {
   menuButton.addEventListener('click', () => {
     const opening = menuButton.getAttribute('aria-expanded') !== 'true';
     menuButton.setAttribute('aria-expanded', String(opening));
-    menuButton.setAttribute('aria-label', opening ? '메뉴 닫기' : '메뉴 열기');
+    menuButton.setAttribute('aria-label', isEnglish ? (opening ? 'Close menu' : 'Open menu') : (opening ? '메뉴 닫기' : '메뉴 열기'));
     mobileNav.hidden = !opening;
     document.body.classList.toggle('menu-open', opening);
   });
 
   mobileNav.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
   document.addEventListener('keydown', event => { if (event.key === 'Escape') closeMenu(); });
-  window.addEventListener('resize', () => { if (window.innerWidth > 760) closeMenu(); });
+  window.addEventListener('resize', () => { if (window.innerWidth > 980) closeMenu(); });
 }
 
 const robotList = document.querySelector('.robot-marquee');
@@ -58,7 +59,7 @@ if (robotList && marqueeToggle) {
   let visible = false;
   const syncPlayback = () => {
     robotList.classList.toggle('is-marquee-running', visible && !document.hidden && !userPaused);
-    marqueeToggle.setAttribute('aria-label', userPaused ? '로봇 자동 흐름 재생' : '로봇 자동 흐름 일시정지');
+    marqueeToggle.setAttribute('aria-label', isEnglish ? (userPaused ? 'Play robot marquee' : 'Pause robot marquee') : (userPaused ? '로봇 자동 흐름 재생' : '로봇 자동 흐름 일시정지'));
     marqueeToggle.querySelector('[data-marquee-label]').textContent = userPaused ? 'PLAY' : 'PAUSE';
     marqueeToggle.querySelector('[data-marquee-icon]').textContent = userPaused ? '▷' : 'Ⅱ';
   };
