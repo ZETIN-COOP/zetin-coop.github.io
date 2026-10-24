@@ -10,9 +10,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles.css">
-  <link rel="stylesheet" href="./page-motion.css">
-  <script src="./main.js" defer></script>
-  <script src="./page-motion.js" defer></script>
+  <link rel="stylesheet" href="./page-motion.css?v=20261024-2">
+  <script src="./main.js?v=20261024-2" defer></script>
+  <script src="./page-motion.js?v=20261024-2" defer></script>
+  <script src="./contact.js?v=20261024-2" type="module"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">본문으로 바로가기</a>
@@ -21,10 +22,10 @@
     <nav class="desktop-nav" aria-label="주 메뉴">
       <a href="#about">About</a><a href="#robots">Robots</a><a href="#approach">Approach</a><a href="#club">Roots</a>
     </nav>
-    <a class="header-link" href="mailto:zero2infi@gmail.com">프로젝트 문의 <span aria-hidden="true">↗</span></a>
+    <a class="header-link" href="#contact">프로젝트 문의 <span aria-hidden="true">↗</span></a>
     <button class="menu-button" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="mobile-nav"><span></span><span></span></button>
     <nav class="mobile-nav" id="mobile-nav" aria-label="모바일 메뉴" hidden>
-      <a href="#about">About</a><a href="#robots">Robots</a><a href="#approach">Approach</a><a href="#club">Roots</a><a href="mailto:zero2infi@gmail.com">프로젝트 문의</a>
+      <a href="#about">About</a><a href="#robots">Robots</a><a href="#approach">Approach</a><a href="#contact">프로젝트 문의</a><a href="#club">Roots</a>
     </nav>
   </header>
 
@@ -33,7 +34,8 @@
     <a href="#about" aria-label="01 소개"><span>01</span><span class="section-index-label">ABOUT</span></a>
     <a href="#robots" aria-label="02 로봇"><span>02</span><span class="section-index-label">ROBOTS</span></a>
     <a href="#approach" aria-label="03 기술"><span>03</span><span class="section-index-label">APPROACH</span></a>
-    <a href="#club" aria-label="04 Roots"><span>04</span><span class="section-index-label">ROOTS</span></a>
+    <a href="#contact" aria-label="04 프로젝트 문의"><span>04</span><span class="section-index-label">CONTACT</span></a>
+    <a href="#club" aria-label="00 Roots"><span>00</span><span class="section-index-label">ROOTS</span></a>
   </nav>
 
   <main id="main"><span id="top" class="top-anchor" aria-hidden="true"></span>
@@ -52,8 +54,8 @@
 
     <section class="robots section-pad" id="robots" aria-labelledby="robots-title"><div class="panel-content">
       <div class="section-grid robots-intro"><div class="section-label"><span class="marker"></span> 02 / ROBOTS</div><div class="section-content"><p class="section-overline">TECHNOLOGY IN MOTION</p><h2 id="robots-title">로봇의 형태만큼 <span>다양한 가능성.</span></h2><p class="robots-lead">각 플랫폼에서 축적한 설계·제어·자율주행 기술을 소개합니다.</p></div></div>
-      <div class="carousel-controls" role="group" aria-label="로봇 프로젝트 탐색"><span class="carousel-count" aria-live="polite"><b data-carousel-current>01</b> / 06</span><span class="carousel-progress" aria-hidden="true"></span><button type="button" data-carousel-prev aria-controls="robot-list" aria-label="이전 프로젝트" disabled>←</button><button type="button" data-carousel-next aria-controls="robot-list" aria-label="다음 프로젝트">→</button></div>
-      <div class="robot-list" id="robot-list" role="region" aria-roledescription="carousel" aria-label="로봇 프로젝트" tabindex="0">
+      <div class="marquee-toolbar"><span>06 PLATFORMS / ENDLESS POSSIBILITIES</span><button type="button" class="marquee-toggle" aria-controls="robot-list" aria-label="로봇 자동 흐름 일시정지"><span data-marquee-label>PAUSE</span><span data-marquee-icon aria-hidden="true">Ⅱ</span></button></div>
+      <div class="robot-list robot-marquee" id="robot-list" role="region" aria-label="로봇 프로젝트, 자동으로 흐르는 갤러리">
         <article class="robot-row origin-project" aria-labelledby="line-tracer-title">
           <div class="robot-number">01 <span>/ THE BEGINNING</span></div>
           <div class="robot-visual"><img src="./assets/projects/line-tracer.jpg" alt="ZETIN 라인트레이서 프로젝트의 주행 트랙" width="1280" height="960" loading="lazy"><span>ZETIN PROJECT ARCHIVE / 01</span></div>
@@ -91,10 +93,24 @@
     <section class="approach section-pad" id="approach" aria-labelledby="approach-title"><div class="panel-content">
       <div class="section-grid"><div class="section-label"><span class="marker"></span> 03 / APPROACH</div><div class="section-content"><p class="section-overline">DESIGN · CONTROL · INTELLIGENCE</p><h2 id="approach-title">과제의 목적에 맞춰<br class="desktop-break"> <span>기술을 연결합니다.</span></h2><p class="approach-lead">기업·기관의 요구사항과 사용 환경에 맞춰 기구 설계부터 임베디드 제어, 환경 인식과 자율주행까지 필요한 기술을 조합하고 구현합니다.</p></div></div>
       <div class="approach-grid"><article><span>01 /</span><h3>Design</h3><p>목표와 사용 환경에 맞는 기구와 플랫폼을 설계합니다.</p></article><article><span>02 /</span><h3>Control</h3><p>센서와 액추에이터를 통합해 안정적인 제어를 구현합니다.</p></article><article><span>03 /</span><h3>Autonomy</h3><p>인식·자율주행·학습 기반 제어를 과제에 맞게 적용합니다.</p></article></div>
-      <div class="project-inquiry"><div><p>PROJECT INQUIRY</p><h3>함께 풀어야 할 로봇 과제가 있나요?</h3><span>목표와 요구사항을 알려주시면 적용할 기술을 함께 검토하겠습니다.</span></div><a href="mailto:zero2infi@gmail.com" aria-label="프로젝트 문의 이메일 작성">프로젝트 문의 <span aria-hidden="true">↗</span></a></div>
     </div></section>
 
-    <section class="club" id="club" aria-labelledby="club-title"><div class="panel-content"><div class="club-inner"><div class="section-label"><span class="marker"></span> 04 / ROOTS</div><div><p>THE BEGINNING IS NEVER THE LIMIT.</p><h2 id="club-title">FROM A LINE<br>TO <span>INFINITE.</span></h2><div class="club-bottom"><div class="club-affiliation"><img src="./assets/ZETIN_logo.svg" alt="ZETIN 동아리 공식 로고" width="172" height="64"><p>0에서 무한대까지,<br>무에서 유를 창조하다.</p></div><a href="https://zetin.uos.ac.kr/" target="_blank" rel="noopener noreferrer">ZETIN 동아리 사이트 <span aria-hidden="true">↗</span></a></div></div></div></div>  <footer class="site-footer" role="contentinfo"><a class="wordmark" href="#top" aria-label="ZEro To INfinite 홈">ZEro To INfinite</a><span>ROBOTICS R&amp;D PARTNER</span><a class="footer-email" href="mailto:zero2infi@gmail.com" aria-label="프로젝트 문의 이메일 zero2infi@gmail.com">zero2infi@gmail.com</a><small>© 2026 ZEro To INfinite</small><a href="#top">BACK TO TOP ↑</a></footer></section>
+    <section class="contact section-pad" id="contact" aria-labelledby="contact-title"><div class="panel-content">
+      <div class="section-label"><span class="marker"></span> 04 / CONTACT</div>
+      <div class="contact-layout">
+        <div class="contact-intro"><p class="section-overline">LET’S BUILD WHAT’S NEXT.</p><h2 id="contact-title">다음 가능성을,<br><span>함께 만듭니다.</span></h2><p class="contact-copy">풀고 싶은 로봇 과제가 있나요?<br>아이디어의 시작부터 구현까지,<br class="contact-desktop-break"> 필요한 기술을 함께 찾아갑니다.</p><a class="contact-email" href="mailto:zero2infi@gmail.com">zero2infi@gmail.com <span aria-hidden="true">↗</span></a><span class="contact-signature" aria-hidden="true">ZEro To <span>INfinite</span></span></div>
+        <form class="inquiry-form" id="inquiry-form">
+          <div class="inquiry-fields"><label>기업·기관명 <span>*</span><input name="company" autocomplete="organization" placeholder="기업 또는 기관 이름" required maxlength="100"></label><label>담당자명 <span>*</span><input name="name" autocomplete="name" placeholder="성함" required maxlength="60"></label></div>
+          <label>이메일 <span>*</span><input type="email" name="email" autocomplete="email" placeholder="you@company.com" required maxlength="254"></label>
+          <label>문의 분야 <span>*</span><select name="type" required><option value="" disabled selected>어떤 프로젝트를 생각하고 계신가요?</option>통합 R&amp;D 프로젝트</option><option>기구·플랫폼 설계</option><option>임베디드·로봇 제어</option><option>자율주행·환경 인식</option><option>기술 협업 및 기타 문의</option></select></label>
+          <label>프로젝트 내용 <span>*</span><textarea name="message" placeholder="프로젝트 목표, 필요한 기술, 예상 일정 등을 편하게 알려주세요." required maxlength="4000" rows="4"></textarea></label>
+          <div class="inquiry-submit"><p id="inquiry-help">입력한 내용으로 이메일 작성창이 열립니다.</p><button type="submit" aria-describedby="inquiry-help">프로젝트 문의하기 <span aria-hidden="true">↗</span></button></div>
+          <p class="inquiry-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </div></section>
+
+    <section class="club" id="club" aria-labelledby="club-title"><div class="panel-content"><div class="club-inner"><div class="section-label"><span class="marker"></span> 00 / ROOTS</div><div><p>THE BEGINNING IS NEVER THE LIMIT.</p><h2 id="club-title">FROM A LINE<br>TO <span>INFINITE.</span></h2><div class="club-bottom"><div class="club-affiliation"><img src="./assets/ZETIN_logo.svg" alt="ZETIN 동아리 공식 로고" width="172" height="64"><p>0에서 무한대까지,<br>무에서 유를 창조하다.</p></div><a href="https://zetin.uos.ac.kr/" target="_blank" rel="noopener noreferrer">ZETIN 동아리 사이트 <span aria-hidden="true">↗</span></a></div></div></div></div>  <footer class="site-footer" role="contentinfo"><a class="wordmark" href="#top" aria-label="ZEro To INfinite 홈">ZEro To INfinite</a><span>ROBOTICS R&amp;D PARTNER</span><a class="footer-email" href="#contact">프로젝트 문의 ↗</a><small>© 2026 ZEro To INfinite</small><a href="#top">BACK TO TOP ↑</a></footer></section>
   </main>
 
 

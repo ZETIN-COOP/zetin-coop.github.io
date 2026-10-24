@@ -6,7 +6,7 @@
   const carousel = document.querySelector('.robot-list');
   let frame = 0;
   let activePanel = -1;
-  let cardWidth = 0;
+
   let journeyFrame = 0;
   const journeyDurationMs = 1600;
   const panelTargets = new Map(panels.map((panel) => ['#' + (panel.id || 'top'), panel]));
@@ -40,14 +40,6 @@
   };
 
   const clamp = (value, min = 0, max = 1) => Math.max(min, Math.min(max, value));
-  const updateCardWidth = () => {
-    if (!carousel) return;
-    const width = carousel.clientWidth;
-    if (width <= 0 || Math.abs(width - cardWidth) < .5) return;
-    cardWidth = width;
-    carousel.dispatchEvent(new Event('carousel:layout'));
-  };
-
   const updateScrollableRegions = () => {
     document.querySelectorAll('.panel-content,.robot-details').forEach((region) => {
       const scrollable = getComputedStyle(region).overflowY === 'auto' && region.scrollHeight > region.clientHeight + 4;
@@ -111,7 +103,7 @@
     if (!frame) frame = requestAnimationFrame(render);
   };
   const layout = () => {
-    updateCardWidth();
+
     updateScrollableRegions();
     schedule();
   };
