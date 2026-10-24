@@ -46,8 +46,8 @@ if (robotList && previousProject && nextProject && currentProject) {
   let pointerStartX = null;
   let pointerStartY = null;
   let readingUntil = 0;
-  const autoPauseMs = 2100;
-  const slideDurationMs = 680;
+  const autoPauseMs = 4200;
+  const slideDurationMs = 1100;
 
   projects.forEach((project, index) => {
     project.setAttribute('aria-roledescription', 'slide');
