@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" class="viewport-deck">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,7 +10,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./page-motion.css">
   <script src="./main.js" defer></script>
+  <script src="./page-motion.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">본문으로 바로가기</a>
@@ -26,6 +28,14 @@
     </nav>
   </header>
 
+  <nav class="section-index" aria-label="페이지 섹션">
+    <a href="#top" aria-label="첫 화면" aria-current="location"><span>IN</span><span class="section-index-label">INTRO</span></a>
+    <a href="#about" aria-label="01 소개"><span>01</span><span class="section-index-label">ABOUT</span></a>
+    <a href="#robots" aria-label="02 로봇"><span>02</span><span class="section-index-label">ROBOTS</span></a>
+    <a href="#approach" aria-label="03 기술"><span>03</span><span class="section-index-label">APPROACH</span></a>
+    <a href="#club" aria-label="04 Roots"><span>04</span><span class="section-index-label">ROOTS</span></a>
+  </nav>
+
   <main id="main"><span id="top" class="top-anchor" aria-hidden="true"></span>
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-topline"><span>ROBOTICS R&amp;D PARTNER</span><span>ROOTED IN ZETIN</span></div>
@@ -35,14 +45,14 @@
       <div class="hero-bottom"><p>ZETIN에서 시작한 기술을 바탕으로,<br class="desktop-break"> 로봇 R&amp;D 과제를 함께 풀어갑니다.</p><a href="#about" aria-label="소개로 이동">SCROLL TO EXPLORE <span aria-hidden="true">↓</span></a><span>01 — 04</span></div>
     </section>
 
-    <section class="about section-pad" id="about" aria-labelledby="about-title">
+    <section class="about section-pad" id="about" aria-labelledby="about-title"><div class="panel-content">
       <div class="section-grid"><div class="section-label"><span class="marker"></span> 01 / ABOUT</div><div class="section-content"><p class="section-overline">FROM THE FIRST LINE</p><h2 id="about-title">한 줄을 따라 달리던 시작이<br class="desktop-break"> <span>다양한 과제의 해법으로.</span></h2><div class="about-copy"><p><strong>ZEro To INfinite</strong>는 서울시립대학교 로봇 연구회 ZETIN에서 출발했습니다. 라인트레이서에서 쌓은 제작 경험을 바탕으로 다양한 로봇 플랫폼의 설계와 제어 기술을 확장해 왔습니다.</p><p>휴머노이드, 배달로봇, 사족보행 로봇, 드론, 재난 로봇을 개발하며 축적한 기술을 기업·기관의 목적에 맞는 R&amp;D 프로젝트에 연결합니다.</p></div></div></div>
       <div class="origin-band" role="img" aria-label="LINE TRACER와 INFINITE FORMS 사이에 무한대 모양의 흰 주행선이 있고, 흰 라인트레이서가 출발·도착 마커 사이에서 잠시 멈췄다가 다시 앞으로 주행합니다"><div class="origin-band-head"><span>LINE TRACER</span><span>INFINITE FORMS</span></div><svg class="origin-course" viewBox="0 0 1200 205" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path id="origin-course-path" class="origin-course-line" d="M 574.5 98 L 612.43 60.07 A 60 60 0 1 1 612.43 144.93 L 527.57 60.07 A 60 60 0 1 0 527.57 144.93 L 574.5 98 Z"/><g class="origin-end-marks"><path transform="translate(549 123.5) rotate(-45)" d="M 0 -24 V -12 M 0 12 V 24"/><path transform="translate(600 72.5) rotate(-45)" d="M 0 -24 V -12 M 0 12 V 24"/></g></svg><svg class="origin-tracer" viewBox="0 0 800 800" aria-hidden="true"><defs><filter id="origin-tracer-white" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  -0.2456 -0.826 -0.0834 0 1.155" result="white-silhouette"/><feComposite in="white-silhouette" in2="SourceAlpha" operator="in"/></filter></defs><image href="./assets/line-tracer-top.png" width="800" height="800" filter="url(#origin-tracer-white)"/></svg></div>
-    </section>
+    </div></section>
 
-    <section class="robots section-pad" id="robots" aria-labelledby="robots-title">
+    <section class="robots section-pad" id="robots" aria-labelledby="robots-title"><div class="panel-content">
       <div class="section-grid robots-intro"><div class="section-label"><span class="marker"></span> 02 / ROBOTS</div><div class="section-content"><p class="section-overline">TECHNOLOGY IN MOTION</p><h2 id="robots-title">로봇의 형태만큼 <span>다양한 가능성.</span></h2><p class="robots-lead">각 플랫폼에서 축적한 설계·제어·자율주행 기술을 소개합니다.</p></div></div>
-      <div class="carousel-controls" role="group" aria-label="로봇 프로젝트 탐색"><span class="carousel-count" aria-live="polite"><b data-carousel-current>01</b> / 06</span><button type="button" data-carousel-prev aria-controls="robot-list" aria-label="이전 프로젝트" disabled>←</button><button type="button" data-carousel-next aria-controls="robot-list" aria-label="다음 프로젝트">→</button></div>
+      <div class="carousel-controls" role="group" aria-label="로봇 프로젝트 탐색"><span class="carousel-count" aria-live="polite"><b data-carousel-current>01</b> / 06</span><span class="carousel-progress" aria-hidden="true"></span><button type="button" data-carousel-prev aria-controls="robot-list" aria-label="이전 프로젝트" disabled>←</button><button type="button" data-carousel-next aria-controls="robot-list" aria-label="다음 프로젝트">→</button></div>
       <div class="robot-list" id="robot-list" role="region" aria-roledescription="carousel" aria-label="로봇 프로젝트" tabindex="0">
         <article class="robot-row origin-project" aria-labelledby="line-tracer-title">
           <div class="robot-number">01 <span>/ THE BEGINNING</span></div>
@@ -76,17 +86,17 @@
         </article>
       </div>
       <p class="visual-note">* 이미지는 <a href="https://projects.zetin.uos.ac.kr/projects" target="_blank" rel="noopener noreferrer">ZETIN 프로젝트 아카이브 ↗</a>의 관련 작업 기록을 임시로 사용했습니다. 각 프로젝트의 실제 사진은 추후 교체됩니다.</p>
-    </section>
+    </div></section>
 
-    <section class="approach section-pad" id="approach" aria-labelledby="approach-title">
+    <section class="approach section-pad" id="approach" aria-labelledby="approach-title"><div class="panel-content">
       <div class="section-grid"><div class="section-label"><span class="marker"></span> 03 / APPROACH</div><div class="section-content"><p class="section-overline">DESIGN · CONTROL · INTELLIGENCE</p><h2 id="approach-title">과제의 목적에 맞춰<br class="desktop-break"> <span>기술을 연결합니다.</span></h2><p class="approach-lead">기업·기관의 요구사항과 사용 환경에 맞춰 기구 설계부터 임베디드 제어, 환경 인식과 자율주행까지 필요한 기술을 조합하고 구현합니다.</p></div></div>
       <div class="approach-grid"><article><span>01 /</span><h3>Design</h3><p>목표와 사용 환경에 맞는 기구와 플랫폼을 설계합니다.</p></article><article><span>02 /</span><h3>Control</h3><p>센서와 액추에이터를 통합해 안정적인 제어를 구현합니다.</p></article><article><span>03 /</span><h3>Autonomy</h3><p>인식·자율주행·학습 기반 제어를 과제에 맞게 적용합니다.</p></article></div>
       <div class="project-inquiry"><div><p>PROJECT INQUIRY</p><h3>함께 풀어야 할 로봇 과제가 있나요?</h3><span>목표와 요구사항을 알려주시면 적용할 기술을 함께 검토하겠습니다.</span></div><a href="mailto:zero2infi@gmail.com" aria-label="프로젝트 문의 이메일 작성">프로젝트 문의 <span aria-hidden="true">↗</span></a></div>
-    </section>
+    </div></section>
 
-    <section class="club" id="club" aria-labelledby="club-title"><div class="club-inner"><div class="section-label"><span class="marker"></span> 04 / ROOTS</div><div><p>THE BEGINNING IS NEVER THE LIMIT.</p><h2 id="club-title">FROM A LINE<br>TO <span>INFINITE.</span></h2><div class="club-bottom"><div class="club-affiliation"><img src="./assets/ZETIN_logo.svg" alt="ZETIN 동아리 공식 로고" width="172" height="64"><p>0에서 무한대까지,<br>무에서 유를 창조하다.</p></div><a href="https://zetin.uos.ac.kr/" target="_blank" rel="noopener noreferrer">ZETIN 동아리 사이트 <span aria-hidden="true">↗</span></a></div></div></div></section>
+    <section class="club" id="club" aria-labelledby="club-title"><div class="panel-content"><div class="club-inner"><div class="section-label"><span class="marker"></span> 04 / ROOTS</div><div><p>THE BEGINNING IS NEVER THE LIMIT.</p><h2 id="club-title">FROM A LINE<br>TO <span>INFINITE.</span></h2><div class="club-bottom"><div class="club-affiliation"><img src="./assets/ZETIN_logo.svg" alt="ZETIN 동아리 공식 로고" width="172" height="64"><p>0에서 무한대까지,<br>무에서 유를 창조하다.</p></div><a href="https://zetin.uos.ac.kr/" target="_blank" rel="noopener noreferrer">ZETIN 동아리 사이트 <span aria-hidden="true">↗</span></a></div></div></div></div>  <footer class="site-footer" role="contentinfo"><a class="wordmark" href="#top" aria-label="ZEro To INfinite 홈">ZEro To INfinite</a><span>ROBOTICS R&amp;D PARTNER</span><a class="footer-email" href="mailto:zero2infi@gmail.com" aria-label="프로젝트 문의 이메일 zero2infi@gmail.com">zero2infi@gmail.com</a><small>© 2026 ZEro To INfinite</small><a href="#top">BACK TO TOP ↑</a></footer></section>
   </main>
 
-  <footer class="site-footer"><a class="wordmark" href="#top" aria-label="ZEro To INfinite 홈">ZEro To INfinite</a><span>ROBOTICS R&amp;D PARTNER</span><a class="footer-email" href="mailto:zero2infi@gmail.com" aria-label="프로젝트 문의 이메일 zero2infi@gmail.com">zero2infi@gmail.com</a><small>© 2026 ZEro To INfinite</small><a href="#top">BACK TO TOP ↑</a></footer>
+
 </body>
 </html>

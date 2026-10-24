@@ -44,6 +44,8 @@ if (robotList && previousProject && nextProject && currentProject) {
   let queuedMoves = 0;
   let carouselVisible = false;
   let pointerStartX = null;
+  let pointerStartY = null;
+  let readingUntil = 0;
   const autoPauseMs = 2100;
   const slideDurationMs = 680;
 
@@ -77,9 +79,17 @@ if (robotList && previousProject && nextProject && currentProject) {
   const setActive = (index) => {
     activeIndex = (index + projects.length) % projects.length;
     currentProject.textContent = String(activeIndex + 1).padStart(2, '0');
+    currentProject.closest('.carousel-controls')?.style.setProperty('--carousel-index', activeIndex);
     previousProject.disabled = false;
     nextProject.disabled = false;
-    projects.forEach((project, i) => project.classList.toggle('is-active', i === activeIndex));
+    const focusedSlide = document.activeElement?.closest('.robot-row');
+    if (focusedSlide && projects.indexOf(focusedSlide) !== activeIndex) robotList.focus({ preventScroll: true });
+    projects.forEach((project, i) => {
+      const active = i === activeIndex;
+      project.classList.toggle('is-active', active);
+      project.inert = !active;
+      project.setAttribute('aria-hidden', String(!active));
+    });
     leadingClone.classList.toggle('is-active', activeIndex === projects.length - 1);
     trailingClone.classList.toggle('is-active', activeIndex === 0);
   };
@@ -87,7 +97,7 @@ if (robotList && previousProject && nextProject && currentProject) {
     clearTimeout(autoTimer);
     autoTimer = 0;
   };
-  const canAuto = () => carouselVisible && !document.hidden && !reducedMotion.matches && projects.length > 1;
+  const canAuto = () => carouselVisible && !document.hidden && !reducedMotion.matches && projects.length > 1 && !robotList.matches(':focus-within') && performance.now() >= readingUntil;
   const scheduleAuto = () => {
     stopAuto();
     if (canAuto() && !moving && !pointerStartX) autoTimer = window.setTimeout(() => move(1), autoPauseMs);
@@ -145,17 +155,28 @@ if (robotList && previousProject && nextProject && currentProject) {
   });
   robotList.addEventListener('pointerdown', (event) => {
     pointerStartX = event.clientX;
+    pointerStartY = event.clientY;
     stopAuto();
   });
   robotList.addEventListener('pointerup', (event) => {
     if (pointerStartX === null) return;
     const distance = event.clientX - pointerStartX;
+    const verticalDistance = event.clientY - pointerStartY;
     pointerStartX = null;
-    if (Math.abs(distance) > 35) move(distance < 0 ? 1 : -1);
+    pointerStartY = null;
+    if (Math.abs(distance) > 35 && Math.abs(distance) > Math.abs(verticalDistance)) move(distance < 0 ? 1 : -1);
     else scheduleAuto();
   });
-  robotList.addEventListener('pointercancel', () => { pointerStartX = null; scheduleAuto(); });
-  window.addEventListener('resize', () => {
+  robotList.addEventListener('pointercancel', () => { pointerStartX = null; pointerStartY = null; scheduleAuto(); });
+  robotList.addEventListener('focusin', stopAuto);
+  robotList.addEventListener('focusout', () => setTimeout(scheduleAuto, 0));
+  robotList.addEventListener('scroll', (event) => {
+    if (!event.target.classList?.contains('robot-details')) return;
+    readingUntil = performance.now() + 6000;
+    stopAuto();
+    autoTimer = setTimeout(scheduleAuto, 6000);
+  }, {capture:true, passive:true});
+  const refreshCarouselLayout = () => {
     cancelAnimationFrame(slideFrame);
     slideFrame = 0;
     moving = false;
@@ -165,7 +186,9 @@ if (robotList && previousProject && nextProject && currentProject) {
     setPosition(positionFor(physicalIndex));
     setActive(physicalIndex - 1);
     scheduleAuto();
-  });
+  };
+  window.addEventListener('resize', refreshCarouselLayout);
+  robotList.addEventListener('carousel:layout', refreshCarouselLayout);
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(([entry]) => {
       carouselVisible = entry.isIntersecting;
@@ -251,8 +274,7 @@ if (originBand && originPath && originTracer) {
   window.addEventListener('resize', () => placeTracer(currentFraction));
 }
 
-const reducedMotionForPage = window.matchMedia('(prefers-reduced-motion: reduce)');
-if ('IntersectionObserver' in window && !reducedMotionForPage.matches) {
+if ('IntersectionObserver' in window) {
   const revealTargets = document.querySelectorAll('.about .section-label, .about .section-overline, .about h2, .about-copy p, .origin-band, .robots .section-label, .robots .section-overline, .robots h2, .robots-lead, .robot-list, .approach .section-label, .approach .section-overline, .approach h2, .approach-lead, .approach-grid article, .project-inquiry, .club .section-label, .club h2, .club-bottom');
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
