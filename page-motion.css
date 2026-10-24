@@ -562,3 +562,15 @@ html[lang=en] .contact h2,html[lang=en] .section-content h2{word-break:normal;ov
   .mobile-nav:not([hidden]){padding:24px;gap:16px}
   .mobile-nav a{font-size:26px;line-height:1.2}
 }
+
+/* Invert each capability card without delaying its pointer response. */
+.viewport-deck .approach-grid article,
+.viewport-deck .approach-grid article.reveal-on-scroll{
+  background-color:var(--paper);color:var(--ink);--approach-copy:var(--soft);
+  transition:opacity 1.35s cubic-bezier(.2,.7,.2,1) var(--reveal-delay,0ms),transform 1.6s cubic-bezier(.2,.7,.2,1) var(--reveal-delay,0ms),background-color .3s ease,color .3s ease,border-color .3s ease;
+}
+.viewport-deck .approach-grid article p{color:var(--approach-copy);transition:color .3s ease}
+.viewport-deck .approach-grid article:focus-visible{background-color:var(--ink);color:var(--paper);border-color:var(--ink);--approach-copy:var(--paper);outline:2px solid var(--ink);outline-offset:4px}
+@media(hover:hover){
+  .viewport-deck .approach-grid article:hover{background-color:var(--ink);color:var(--paper);border-color:var(--ink);--approach-copy:var(--paper)}
+}
