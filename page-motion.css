@@ -574,3 +574,22 @@ html[lang=en] .contact h2,html[lang=en] .section-content h2{word-break:normal;ov
 @media(hover:hover){
   .viewport-deck .approach-grid article:hover{background-color:var(--ink);color:var(--paper);border-color:var(--ink);--approach-copy:var(--paper)}
 }
+
+/* Shared text rows keep headings aligned when descriptions wrap differently. */
+@media(min-width:761px) and (min-height:581px){
+  .viewport-deck .approach-grid{grid-template-rows:minmax(0,1fr) auto auto;row-gap:14px}
+  .viewport-deck .approach-grid article{display:grid;grid-template-rows:subgrid;grid-row:1 / span 3;row-gap:14px}
+  .viewport-deck .approach-grid article>span{align-self:start}
+  .viewport-deck .approach-grid h3{margin:0;align-self:start}
+  .viewport-deck .approach-grid p{align-self:start}
+}
+@media(max-width:760px) and (orientation:portrait){
+  .viewport-deck .approach-grid{grid-template-rows:repeat(3,minmax(min-content,1fr));max-height:400px}
+  .viewport-deck .approach-grid article{grid-template-columns:20px minmax(0,1fr);grid-template-rows:auto auto;align-items:start;align-content:start;gap:8px 10px}
+  .viewport-deck .approach-grid p{grid-column:1 / -1}
+}
+@media(max-width:760px) and (max-height:700px) and (orientation:portrait){
+  .viewport-deck .approach .panel-content{gap:16px}
+  .viewport-deck .approach-grid{row-gap:8px}
+  .viewport-deck .approach-grid article{padding:12px}
+}
