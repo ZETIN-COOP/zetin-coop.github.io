@@ -209,7 +209,7 @@ h1,h2,h3,h4,p{margin-top:0}
 /* A curved line tracer course, inspired by the club's competition track. */
 .origin-band{position:relative;display:block;height:205px;margin-top:105px;padding:0;background:var(--ink);overflow:hidden}
 .origin-band-head{position:absolute;z-index:2;top:50%;left:clamp(24px,4vw,58px);right:clamp(24px,4vw,58px);display:flex;align-items:center;justify-content:space-between;gap:24px;font-size:clamp(30px,3.1vw,45px);line-height:1.08;letter-spacing:var(--tracking-headline);white-space:nowrap;transform:translateY(-50%);pointer-events:none}
-.origin-course{position:absolute;inset:0;width:100%;height:100%;max-width:none;overflow:visible}
+.origin-course{position:absolute;top:50%;left:50%;width:100%;height:auto;aspect-ratio:1200 / 205;max-width:none;overflow:visible;transform:translate(-50%,-50%)}
 .origin-course-line{fill:none;stroke:#FFFFFF;stroke-width:4.8;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
 .origin-end-marks path{fill:none;stroke:#FFFFFF;stroke-width:4.8;stroke-linecap:butt;vector-effect:non-scaling-stroke}
 .origin-tracer{position:absolute;z-index:4;left:0;top:0;width:50px;height:50px;max-width:none;overflow:visible;transform:translate(-50%,-50%) rotate(90deg);opacity:0;pointer-events:none}
