@@ -94,6 +94,7 @@
     });
     if (closest !== activePanel) {
       activePanel = closest;
+      root.dataset.activeSection = panels[closest].id || 'top';
       indexLinks.forEach((link, index) => {
         if (index === closest) link.setAttribute('aria-current', 'location');
         else link.removeAttribute('aria-current');

@@ -32,10 +32,14 @@ if (typeof document !== 'undefined') {
       current.searchParams.delete('lang');
       history.replaceState(history.state, '', current);
     }
+    const sectionHashes = new Set(Array.from(document.querySelectorAll('.section-index a'), (link) => link.getAttribute('href')));
+    let pendingSection = sectionHashes.has(window.location.hash) ? window.location.hash : null;
     const updateLinks = () => {
       const visibleLocation = new URL(window.location.href);
-      const visibleSection = document.querySelector('.section-index a[aria-current="location"]')?.getAttribute('href');
-      if (visibleSection?.startsWith('#')) visibleLocation.hash = visibleSection;
+      const visibleSection = document.documentElement.dataset.activeSection;
+      if (pendingSection === '#' + visibleSection) pendingSection = null;
+      if (pendingSection) visibleLocation.hash = pendingSection;
+      else if (visibleSection) visibleLocation.hash = '#' + visibleSection;
       document.querySelectorAll('[data-language]').forEach((link) => {
         const code = link.dataset.language;
         link.href = localizedUrl(visibleLocation, code, base);
@@ -44,7 +48,22 @@ if (typeof document !== 'undefined') {
       });
     };
     updateLinks();
-    window.addEventListener('hashchange', updateLinks);
+    const syncHistory = () => {
+      pendingSection = sectionHashes.has(window.location.hash) ? window.location.hash : null;
+      updateLinks();
+    };
+    const useVisibleSection = () => { pendingSection = null; updateLinks(); };
+    window.addEventListener('hashchange', syncHistory);
+    window.addEventListener('popstate', syncHistory);
+    window.addEventListener('wheel', useVisibleSection, {passive:true});
+    window.addEventListener('touchmove', useVisibleSection, {passive:true});
+    window.addEventListener('keydown', (event) => {
+      if (['ArrowUp','ArrowDown','PageUp','PageDown','Home','End',' '].includes(event.key)) useVisibleSection();
+    });
+    document.addEventListener('click', (event) => {
+      const href = event.target.closest('a')?.getAttribute('href');
+      if (sectionHashes.has(href)) { pendingSection = href; updateLinks(); }
+    });
     document.addEventListener('sectionchange', updateLinks);
     // Section navigation uses pushState, so refresh before the pointer or keyboard activates a switch.
     document.querySelector('.language-switch')?.addEventListener('pointerover', updateLinks);
