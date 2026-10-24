@@ -594,12 +594,14 @@ html[lang=en] .contact h2,html[lang=en] .section-content h2{word-break:normal;ov
   .viewport-deck .approach-grid article{padding:12px}
 }
 
-/* Frame the supplied design renders without cropping their silhouettes. */
+/* Frame the supplied design renders in the requested compositions. */
 .viewport-deck .robot-marquee .robot-visual.robot-render{background:var(--paper)}
 .viewport-deck .robot-marquee .robot-visual.robot-render:after{display:none}
 .viewport-deck .robot-marquee .robot-visual.robot-render img{object-fit:contain;object-position:center;filter:grayscale(1);padding:12px}
+.viewport-deck .robot-marquee .robot-visual .robot-render-crop{position:absolute;inset:12px;width:calc(100% - 24px);height:calc(100% - 24px);max-width:none;fill:none;stroke:none;filter:grayscale(1);overflow:hidden}
 .viewport-deck .robot-marquee .robot-visual.robot-render-sammy img{inset:auto;left:50%;top:50%;width:340%;height:134%;padding:0;object-fit:contain;object-position:center;transform:translate(-50%,-44%)}
 @media(max-height:500px) and (orientation:landscape){
   .viewport-deck .robot-marquee .robot-visual.robot-render img{padding:8px}
   .viewport-deck .robot-marquee .robot-visual.robot-render-sammy img{padding:0}
+  .viewport-deck .robot-marquee .robot-visual .robot-render-crop{inset:8px;width:calc(100% - 16px);height:calc(100% - 16px)}
 }
