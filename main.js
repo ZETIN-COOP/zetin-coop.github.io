@@ -85,6 +85,12 @@ const originTracer = document.querySelector('.origin-tracer');
 if (originBand && originPath && originTracer) {
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const pathLength = originPath.getTotalLength();
+  const trail = originPath.cloneNode(false);
+  trail.removeAttribute('id');
+  trail.setAttribute('class', 'origin-course-trail');
+  trail.style.strokeDasharray = `${pathLength}`;
+  trail.style.strokeDashoffset = `${pathLength}`;
+  originPath.after(trail);
   const courseDurationMs = 4800;
   const markerStopMs = 1700;
   const aboutPanel = originBand.closest('.about');
@@ -107,15 +113,21 @@ if (originBand && originPath && originTracer) {
     const tracerWidth = Number.parseFloat(getComputedStyle(originTracer).width);
     const heading = originBand.querySelector('.origin-band-head');
     const headingSize = Number.parseFloat(getComputedStyle(heading).fontSize);
-    const portrait = window.innerWidth <= 760 && window.innerHeight > 500;
-    const fullCourseWidth = Math.min(scene.width * (portrait ? 3 : 1.75), scene.height * 1200 / 205 * .92);
+    const portrait = window.innerWidth <= 760 && window.innerHeight > window.innerWidth;
+    const fullHeadingSize = Math.max(headingSize, Math.min(scene.width * (portrait ? .075 : .028), scene.height * .07, 46));
+    const fullGutter = portrait ? 24 : Math.min(64, scene.width * .035);
+    const labelWidth = Math.max(...[...heading.children].map(label => label.getBoundingClientRect().width)) * fullHeadingSize / headingSize;
+    const trackRoom = scene.width - 2 * (fullGutter + labelWidth + Math.max(20, scene.width * .018));
+    const courseAndRobotRatio = originPath.getBBox().width / 1200 + 1.44 * tracerWidth / courseWidth;
+    const fullCourseWidth = Math.min(scene.width * (portrait ? 3 : 1.75), scene.height * 1200 / 205 * .92, portrait ? Infinity : Math.max(100, trackRoom) / courseAndRobotRatio);
     const values = {
       'rest-left': band.left - scene.left, 'rest-top': band.top - scene.top,
       'rest-width': band.width, 'rest-height': band.height,
       'rest-course': courseWidth, 'full-course': fullCourseWidth,
       'rest-tracer': tracerWidth, 'full-tracer': tracerWidth * fullCourseWidth / courseWidth,
       'rest-heading': headingSize,
-      'full-heading': Math.max(headingSize, Math.min(scene.width * (portrait ? .075 : .032), scene.height * .073, 52)),
+      'full-heading': fullHeadingSize,
+      'rest-gutter': Number.parseFloat(getComputedStyle(heading).left), 'full-gutter': fullGutter,
     };
     Object.entries(values).forEach(([name, value]) => aboutPanel.style.setProperty(`--origin-${name}`, `${value}px`));
     aboutPanel.dataset.originIntro = introState;
@@ -153,6 +165,14 @@ if (originBand && originPath && originTracer) {
     originTracer.style.left = `${svgBounds.left - bandBounds.left + point.x * scaleX}px`;
     originTracer.style.top = `${svgBounds.top - bandBounds.top + point.y * scaleY}px`;
     originTracer.style.transform = `translate(-50%,-50%) rotate(${angle}deg)`;
+    trail.style.strokeDashoffset = `${(1 - fraction) * pathLength}`;
+    trail.style.strokeWidth = `${4.8 / scaleX}`;
+  };
+  const prepareIntro = () => {
+    introState = 'waiting';
+    cycleStartedAt = 0;
+    measureIntro();
+    placeTracer(0);
   };
   const runCourse = (now) => {
     if (!courseVisible || document.hidden || reducedMotion.matches) {
@@ -200,13 +220,20 @@ if (originBand && originPath && originTracer) {
       courseVisible = entry.isIntersecting && entry.intersectionRatio >= .2;
       introReady = entry.intersectionRatio >= .85;
       syncCourse();
-    }, { threshold: [0, .2, .85] }).observe(aboutPanel || originBand);
+      if (entry.intersectionRatio <= .01 && introState === 'done' && !reducedMotion.matches) prepareIntro();
+    }, { threshold: [0, .01, .2, .85], rootMargin: `-${header?.offsetHeight || 68}px 0px 0px 0px` }).observe(aboutPanel || originBand);
   } else {
     finishIntro();
     courseVisible = true;
     syncCourse();
   }
   document.addEventListener('visibilitychange', syncCourse);
+  document.addEventListener('click', (event) => {
+    if (event.target.closest('a[href="#about"]') && introState === 'done' && introReady && !reducedMotion.matches) {
+      prepareIntro();
+      syncCourse();
+    }
+  });
   reducedMotion.addEventListener('change', syncCourse);
   window.addEventListener('resize', () => {
     if (introState === 'waiting') measureIntro();
