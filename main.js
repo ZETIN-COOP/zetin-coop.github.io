@@ -84,6 +84,7 @@ const originPath = document.getElementById('origin-course-path');
 const originTracer = document.querySelector('.origin-tracer');
 if (originBand && originPath && originTracer) {
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const wideCourse = window.matchMedia('(min-width: 1024px)');
   const pathLength = originPath.getTotalLength();
   const trail = originPath.cloneNode(false);
   trail.removeAttribute('id');
@@ -166,7 +167,7 @@ if (originBand && originPath && originTracer) {
     originTracer.style.top = `${svgBounds.top - bandBounds.top + point.y * scaleY}px`;
     originTracer.style.transform = `translate(-50%,-50%) rotate(${angle}deg)`;
     trail.style.strokeDashoffset = `${(1 - fraction) * pathLength}`;
-    trail.style.strokeWidth = `${4.8 / scaleX}`;
+    trail.style.strokeWidth = `${(wideCourse.matches ? 6.4 : 4.8) / scaleX}`;
   };
   const prepareIntro = () => {
     introState = 'waiting';

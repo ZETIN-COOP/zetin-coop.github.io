@@ -608,6 +608,11 @@ html[lang=en] .contact h2,html[lang=en] .section-content h2{word-break:normal;ov
 .viewport-deck .robot-marquee .robot-visual .robot-render-crop.robot-render-face{inset:0;width:100%;height:100%}
 .viewport-deck .robot-marquee .robot-visual .robot-render-window{width:540px;height:340px;max-width:none;stroke:none;fill:none;overflow:hidden}
 
+@media(min-width:1024px){
+  .viewport-deck .about .origin-course-line,
+  .viewport-deck .about .origin-end-marks path{stroke-width:6.4}
+}
+
 /* Each visit follows one full lap before opening the About scene. */
 .viewport-deck .about .origin-course{left:50%;transform:translate(-47.5%,-50%)}
 .origin-course-trail{fill:none;stroke:var(--paper);stroke-linecap:round;stroke-linejoin:round;opacity:0;vector-effect:none;pointer-events:none;transition:opacity .6s}
