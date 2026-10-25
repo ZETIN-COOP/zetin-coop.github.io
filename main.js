@@ -73,7 +73,7 @@ if (robotList && marqueeToggle) {
   dialog.id = 'robot-detail-dialog';
   dialog.className = 'robot-detail-dialog';
   dialog.setAttribute('aria-labelledby', 'robot-detail-title');
-  dialog.innerHTML = `<div class="robot-detail-header"><span>ROBOT PLATFORMS / IN DETAIL</span><button class="robot-detail-close" type="button" autofocus aria-label="${isEnglish ? 'Close robot details' : '로봇 상세 닫기'}">✕</button></div><nav class="robot-detail-nav" aria-label="${isEnglish ? 'Choose a robot' : '로봇 선택'}"></nav><div class="robot-detail-layout"><div class="robot-detail-image"></div><div class="robot-detail-copy"><h2 id="robot-detail-title"></h2><p class="robot-detail-description"></p><div class="robot-detail-sections"></div></div></div><div class="robot-detail-footer"><span>DESIGN · CONTROL · INTELLIGENCE</span><a href="#contact">Inquiry ↗</a></div>`;
+  dialog.innerHTML = `<div class="robot-detail-header"><span>ROBOT PLATFORMS / IN DETAIL</span><button class="robot-detail-close" type="button" autofocus aria-label="${isEnglish ? 'Close robot details' : '로봇 상세 닫기'}">✕</button></div><nav class="robot-detail-nav" aria-label="${isEnglish ? 'Choose a robot' : '로봇 선택'}"></nav><div class="robot-detail-layout"><div class="robot-detail-image"></div><div class="robot-detail-copy"><h2 id="robot-detail-title"></h2><p class="robot-detail-description"></p><div class="robot-detail-sections"></div></div></div><div class="robot-detail-footer"><span>DESIGN · CONTROL · INTELLIGENCE</span><a href="#contact">${isEnglish ? 'Inquiry' : '문의'} ↗</a></div>`;
   document.body.append(dialog);
   const detailNav = dialog.querySelector('.robot-detail-nav');
   const detailTitle = dialog.querySelector('#robot-detail-title');
