@@ -37,7 +37,7 @@ if (robotList && marqueeToggle) {
   const group = document.createElement('div');
   group.className = 'robot-marquee-group';
   group.setAttribute('role', 'list');
-  projects.forEach((project) => {
+  projects.forEach((project, index) => {
     project.setAttribute('role', 'listitem');
     project.querySelector('.robot-name > span')?.remove();
     const technology = document.createElement('p');
@@ -45,20 +45,124 @@ if (robotList && marqueeToggle) {
     technology.setAttribute('aria-hidden', 'true');
     technology.textContent = project.querySelector('.robot-meta > div:first-child p')?.textContent || '';
     project.querySelector('.robot-details').append(technology);
+    const opener = document.createElement('button');
+    opener.type = 'button';
+    opener.className = 'robot-open';
+    opener.dataset.robotIndex = index;
+    opener.tabIndex = -1;
+    opener.setAttribute('aria-haspopup', 'dialog');
+    opener.setAttribute('aria-controls', 'robot-detail-dialog');
+    opener.setAttribute('aria-label', `${project.querySelector('h3').firstChild.textContent.trim()} ${isEnglish ? 'details' : '상세 보기'}`);
+    const hint = document.createElement('span');
+    hint.className = 'robot-open-label';
+    hint.textContent = isEnglish ? 'DETAILS ↗' : '상세 보기 ↗';
+    hint.setAttribute('aria-hidden', 'true');
+    opener.append(hint);
+    project.append(opener);
     project.querySelectorAll('img').forEach((img) => { img.loading = 'eager'; });
   });
   group.append(...projects);
   const clone = group.cloneNode(true);
   clone.setAttribute('aria-hidden', 'true');
-  clone.inert = true;
+  clone.querySelectorAll('button').forEach(button => { button.tabIndex = -1; });
   clone.querySelectorAll('[id]').forEach((element) => element.removeAttribute('id'));
   clone.querySelectorAll('[aria-labelledby]').forEach((element) => element.removeAttribute('aria-labelledby'));
   track.append(group, clone);
   robotList.append(track);
+  const dialog = document.createElement('dialog');
+  dialog.id = 'robot-detail-dialog';
+  dialog.className = 'robot-detail-dialog';
+  dialog.setAttribute('aria-labelledby', 'robot-detail-title');
+  dialog.innerHTML = `<div class="robot-detail-header"><span>ROBOT PLATFORMS / IN DETAIL</span><button class="robot-detail-close" type="button" autofocus aria-label="${isEnglish ? 'Close robot details' : '로봇 상세 닫기'}">✕</button></div><nav class="robot-detail-nav" aria-label="${isEnglish ? 'Choose a robot' : '로봇 선택'}"></nav><div class="robot-detail-layout"><div class="robot-detail-image"></div><div class="robot-detail-copy"><h2 id="robot-detail-title"></h2><p class="robot-detail-description"></p><div class="robot-detail-sections"></div></div></div><div class="robot-detail-footer"><span>DESIGN · CONTROL · INTELLIGENCE</span><a href="#contact">${isEnglish ? 'Discuss a project ↗' : '프로젝트 문의 ↗'}</a></div>`;
+  document.body.append(dialog);
+  const detailNav = dialog.querySelector('.robot-detail-nav');
+  const detailTitle = dialog.querySelector('#robot-detail-title');
+  const detailImage = dialog.querySelector('.robot-detail-image');
+  const detailSections = dialog.querySelector('.robot-detail-sections');
+  let detailOpener = null;
+  let restoreDetailFocus = true;
+  const sectionLabels = isEnglish ? {} : { 'TECHNOLOGY': '적용 기술', 'NEXT DIRECTION': '향후 개발 방향', 'BEGINNING': '시작점', 'THEN TO NOW': '이어지는 탐구' };
+  const renderDetail = (index) => {
+    const project = projects[index];
+    if (!project) return;
+    detailTitle.replaceChildren(...project.querySelector('h3').cloneNode(true).childNodes);
+    dialog.querySelector('.robot-detail-description').textContent = project.querySelector('.robot-description').textContent;
+    const visual = project.querySelector('.robot-visual').cloneNode(true);
+    visual.querySelectorAll('span').forEach(span => span.remove());
+    detailImage.replaceChildren(visual);
+    detailSections.replaceChildren();
+    project.querySelectorAll('.robot-meta > div').forEach(meta => {
+      const section = document.createElement('section');
+      const heading = document.createElement('h3');
+      const key = meta.querySelector('h4').textContent;
+      heading.textContent = sectionLabels[key] || key;
+      section.append(heading);
+      const content = meta.querySelector('p').textContent;
+      if (key === 'TECHNOLOGY') {
+        const list = document.createElement('ul');
+        content.split(' · ').forEach(value => { const item = document.createElement('li'); item.textContent = value; list.append(item); });
+        section.append(list);
+      } else {
+        const paragraph = document.createElement('p');
+        paragraph.textContent = content;
+        section.append(paragraph);
+      }
+      detailSections.append(section);
+    });
+    detailNav.querySelectorAll('button').forEach((button, buttonIndex) => button.setAttribute('aria-pressed', String(index === buttonIndex)));
+  };
+  projects.forEach((project, index) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.textContent = project.querySelector('h3').firstChild.textContent.trim();
+    button.addEventListener('click', () => renderDetail(index));
+    detailNav.append(button);
+  });
+  const openDetail = (index, opener) => {
+    renderDetail(index);
+    detailOpener = opener.closest('[aria-hidden="true"]') ? detailEntry : opener;
+    detailOpener.focus({preventScroll:true});
+    restoreDetailFocus = true;
+    document.documentElement.classList.add('robot-detail-open');
+    dialog.showModal();
+    syncPlayback();
+  };
+  robotList.addEventListener('click', event => {
+    const button = event.target.closest('.robot-open');
+    if (button) openDetail(Number(button.dataset.robotIndex), button);
+  });
+  const detailEntry = document.createElement('button');
+  detailEntry.type = 'button';
+  detailEntry.className = 'robot-detail-entry';
+  detailEntry.textContent = 'ROBOT PLATFORMS / DETAILS ↗';
+  detailEntry.setAttribute('aria-label', isEnglish ? 'Explore robot details' : '로봇 상세 보기');
+  detailEntry.setAttribute('aria-haspopup', 'dialog');
+  detailEntry.setAttribute('aria-controls', dialog.id);
+  robotList.closest('.panel-content').querySelector('.marquee-toolbar > span').replaceWith(detailEntry);
+  detailEntry.addEventListener('click', () => openDetail(0, detailEntry));
+  dialog.querySelector('.robot-detail-close').addEventListener('click', () => dialog.close());
+  dialog.addEventListener('click', event => {
+    if (event.target !== dialog) return;
+    const bounds = dialog.getBoundingClientRect();
+    if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) dialog.close();
+  });
+  dialog.querySelector('.robot-detail-footer a').addEventListener('click', () => {
+    restoreDetailFocus = false;
+    document.documentElement.classList.remove('robot-detail-open');
+    dialog.close();
+    const contactHeading = document.getElementById('contact-title');
+    contactHeading.tabIndex = -1;
+    contactHeading.focus({preventScroll:true});
+  });
+  dialog.addEventListener('close', () => {
+    document.documentElement.classList.remove('robot-detail-open');
+    syncPlayback();
+    if (restoreDetailFocus && detailOpener?.isConnected) detailOpener.focus({preventScroll:true});
+  });
   let userPaused = false;
   let visible = false;
   const syncPlayback = () => {
-    robotList.classList.toggle('is-marquee-running', visible && !document.hidden && !userPaused);
+    robotList.classList.toggle('is-marquee-running', visible && !document.hidden && !userPaused && !dialog.open);
     marqueeToggle.setAttribute('aria-label', isEnglish ? (userPaused ? 'Play robot marquee' : 'Pause robot marquee') : (userPaused ? '로봇 자동 흐름 재생' : '로봇 자동 흐름 일시정지'));
     marqueeToggle.querySelector('[data-marquee-label]').textContent = userPaused ? 'PLAY' : 'PAUSE';
     marqueeToggle.querySelector('[data-marquee-icon]').textContent = userPaused ? '▷' : 'Ⅱ';
