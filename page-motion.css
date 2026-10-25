@@ -530,7 +530,6 @@ html.viewport-deck{
 
 /* A shared language switch remains available on desktop and mobile. */
 .header-actions{display:flex;align-items:center;gap:clamp(18px,2vw,30px);flex:none}
-.header-link{min-width:148px;justify-content:center;text-align:center}
 .desktop-nav{margin-left:0;gap:clamp(24px,2.6vw,44px)}
 .language-switch{display:flex;align-items:center;gap:8px;font:700 10px/1.4 'DM Sans',sans-serif;letter-spacing:.04em}
 .language-switch a{padding:7px 0;border-bottom:1px solid transparent;opacity:.42;transition:opacity .2s,border-color .2s}
