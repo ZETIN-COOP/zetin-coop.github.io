@@ -87,10 +87,57 @@ if (originBand && originPath && originTracer) {
   const pathLength = originPath.getTotalLength();
   const courseDurationMs = 4800;
   const markerStopMs = 1700;
+  const aboutPanel = originBand.closest('.about');
+  const introDurationMs = 1800;
+  let introState = reducedMotion.matches || !aboutPanel ? 'done' : 'waiting';
+  let introReady = false;
+  let introTimer = 0;
   let courseVisible = false;
   let courseFrame = 0;
   let cycleStartedAt = 0;
   let currentFraction = 0;
+
+  const measureIntro = () => {
+    if (introState === 'done') return;
+    aboutPanel.classList.add('origin-intro-prepared');
+    aboutPanel.dataset.originIntro = 'measuring';
+    const scene = aboutPanel.getBoundingClientRect();
+    const band = originBand.getBoundingClientRect();
+    const courseWidth = originPath.ownerSVGElement.getBoundingClientRect().width;
+    const tracerWidth = Number.parseFloat(getComputedStyle(originTracer).width);
+    const heading = originBand.querySelector('.origin-band-head');
+    const headingSize = Number.parseFloat(getComputedStyle(heading).fontSize);
+    const portrait = window.innerWidth <= 760 && window.innerHeight > 500;
+    const fullCourseWidth = Math.min(scene.width * (portrait ? 3 : 1.75), scene.height * 1200 / 205 * .92);
+    const values = {
+      'rest-left': band.left - scene.left, 'rest-top': band.top - scene.top,
+      'rest-width': band.width, 'rest-height': band.height,
+      'rest-course': courseWidth, 'full-course': fullCourseWidth,
+      'rest-tracer': tracerWidth, 'full-tracer': tracerWidth * fullCourseWidth / courseWidth,
+      'rest-heading': headingSize,
+      'full-heading': Math.max(headingSize, Math.min(scene.width * (portrait ? .075 : .032), scene.height * .073, 52)),
+    };
+    Object.entries(values).forEach(([name, value]) => aboutPanel.style.setProperty(`--origin-${name}`, `${value}px`));
+    aboutPanel.dataset.originIntro = introState;
+  };
+  const finishIntro = (animate = false) => {
+    if (introState === 'done') return;
+    clearTimeout(introTimer);
+    const complete = () => {
+      introState = 'done';
+      delete aboutPanel.dataset.originIntro;
+      aboutPanel.classList.remove('origin-intro-prepared');
+      cycleStartedAt = 0;
+      document.dispatchEvent(new Event('originintroend'));
+    };
+    if (animate) {
+      introState = 'settling';
+      aboutPanel.dataset.originIntro = 'settling';
+      introTimer = window.setTimeout(complete, introDurationMs);
+    } else complete();
+  };
+
+  measureIntro();
 
   const placeTracer = (fraction) => {
     currentFraction = fraction;
@@ -112,21 +159,34 @@ if (originBand && originPath && originTracer) {
       courseFrame = 0;
       return;
     }
+    if (introState === 'settling') {
+      placeTracer(1);
+      courseFrame = requestAnimationFrame(runCourse);
+      return;
+    }
     if (!cycleStartedAt) cycleStartedAt = now;
-    const elapsed = (now - cycleStartedAt) % (courseDurationMs + markerStopMs);
+    const elapsed = introState === 'running' ? now - cycleStartedAt : (now - cycleStartedAt) % (courseDurationMs + markerStopMs);
     const progress = Math.min(elapsed / courseDurationMs, 1);
     const eased = (1 - Math.cos(Math.PI * progress)) / 2;
     placeTracer(eased);
+    if (introState === 'running' && progress === 1) finishIntro(true);
     courseFrame = requestAnimationFrame(runCourse);
   };
   const syncCourse = () => {
+    if (reducedMotion.matches) finishIntro();
+    if (introState === 'waiting' && introReady && courseVisible && !document.hidden) {
+      introState = 'running';
+      aboutPanel.dataset.originIntro = 'running';
+    }
     if (courseVisible && !document.hidden && !reducedMotion.matches) {
+      if (introState === 'waiting') return;
       if (!courseFrame) {
         cycleStartedAt = 0;
         placeTracer(0);
         courseFrame = requestAnimationFrame(runCourse);
       }
     } else {
+      if (introState === 'running' || introState === 'settling') finishIntro();
       cancelAnimationFrame(courseFrame);
       courseFrame = 0;
       cycleStartedAt = 0;
@@ -137,16 +197,25 @@ if (originBand && originPath && originTracer) {
   originTracer.style.opacity = '1';
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(([entry]) => {
-      courseVisible = entry.isIntersecting;
+      courseVisible = entry.isIntersecting && entry.intersectionRatio >= .2;
+      introReady = entry.intersectionRatio >= .85;
       syncCourse();
-    }, { threshold: 0.2 }).observe(originBand);
+    }, { threshold: [0, .2, .85] }).observe(aboutPanel || originBand);
   } else {
+    finishIntro();
     courseVisible = true;
     syncCourse();
   }
   document.addEventListener('visibilitychange', syncCourse);
   reducedMotion.addEventListener('change', syncCourse);
-  window.addEventListener('resize', () => placeTracer(currentFraction));
+  window.addEventListener('resize', () => {
+    if (introState === 'waiting') measureIntro();
+    else if (introState !== 'done') finishIntro();
+    placeTracer(currentFraction);
+  });
+  if (document.fonts) document.fonts.ready.then(() => {
+    if (introState === 'waiting') measureIntro();
+  });
 }
 
 if ('IntersectionObserver' in window) {

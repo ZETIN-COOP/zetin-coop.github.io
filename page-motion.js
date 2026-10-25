@@ -137,6 +137,7 @@
   window.addEventListener('resize', layout, {passive:true});
   window.addEventListener('pageshow', layout);
   document.addEventListener('visibilitychange', schedule);
+  document.addEventListener('originintroend', layout);
   reducedMotion.addEventListener('change', syncMotionPreference);
   if ('ResizeObserver' in window) {
     const observer = new ResizeObserver(layout);

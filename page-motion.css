@@ -608,3 +608,32 @@ html[lang=en] .contact h2,html[lang=en] .section-content h2{word-break:normal;ov
 .viewport-deck .robot-marquee .robot-visual .robot-render-crop.robot-render-face{inset:0;width:100%;height:100%}
 .viewport-deck .robot-marquee .robot-visual .robot-render-window{width:540px;height:340px;max-width:none;stroke:none;fill:none;overflow:hidden}
 
+/* The first visit follows one full lap before opening the About scene. */
+.viewport-deck .about.origin-intro-prepared .panel-content{position:static;overflow:visible;transform:none!important}
+.viewport-deck .about.origin-intro-prepared .section-grid{opacity:0;visibility:hidden;transform:translateY(24px);transition:opacity 1.1s ease,transform 1.5s cubic-bezier(.2,.7,.2,1),visibility 0s}
+.viewport-deck .about.origin-intro-prepared .origin-band{opacity:1!important;transform:none!important;transition:none;--reveal-delay:0ms}
+.viewport-deck .about[data-origin-intro=waiting] .origin-band,
+.viewport-deck .about[data-origin-intro=running] .origin-band,
+.viewport-deck .about[data-origin-intro=settling] .origin-band{position:absolute;z-index:5;left:0;top:0;width:100%;height:100%;min-height:0;max-width:none;margin:0}
+.viewport-deck .about[data-origin-intro=settling] .origin-course{transition:width 1.8s cubic-bezier(.22,.75,.2,1)}
+.viewport-deck .about[data-origin-intro=settling] .origin-tracer{transition:width 1.8s cubic-bezier(.22,.75,.2,1),height 1.8s cubic-bezier(.22,.75,.2,1)}
+.viewport-deck .about[data-origin-intro=settling] .origin-band-head{transition:font-size 1.8s cubic-bezier(.22,.75,.2,1)}
+.viewport-deck .about[data-origin-intro=waiting] .origin-course,
+.viewport-deck .about[data-origin-intro=running] .origin-course{width:var(--origin-full-course)}
+.viewport-deck .about[data-origin-intro=waiting] .origin-tracer,
+.viewport-deck .about[data-origin-intro=running] .origin-tracer{width:var(--origin-full-tracer);height:var(--origin-full-tracer)}
+.viewport-deck .about[data-origin-intro=waiting] .origin-band-head,
+.viewport-deck .about[data-origin-intro=running] .origin-band-head{font-size:var(--origin-full-heading)}
+.viewport-deck .about[data-origin-intro=settling] .section-grid{opacity:1;visibility:visible;transform:none;transition-delay:.35s}
+.viewport-deck .about[data-origin-intro=settling] .origin-band{left:var(--origin-rest-left);top:var(--origin-rest-top);width:var(--origin-rest-width);height:var(--origin-rest-height);transition:left 1.8s cubic-bezier(.22,.75,.2,1),top 1.8s cubic-bezier(.22,.75,.2,1),width 1.8s cubic-bezier(.22,.75,.2,1),height 1.8s cubic-bezier(.22,.75,.2,1)}
+.viewport-deck .about[data-origin-intro=settling] .origin-course{width:var(--origin-rest-course)}
+.viewport-deck .about[data-origin-intro=settling] .origin-tracer{width:var(--origin-rest-tracer);height:var(--origin-rest-tracer)}
+.viewport-deck .about[data-origin-intro=settling] .origin-band-head{font-size:var(--origin-rest-heading)}
+@media(max-width:760px) and (min-height:501px){
+  .viewport-deck .about[data-origin-intro=waiting] .origin-band-head span:first-child,
+  .viewport-deck .about[data-origin-intro=running] .origin-band-head span:first-child{top:clamp(28px,6svh,54px)}
+  .viewport-deck .about[data-origin-intro=waiting] .origin-band-head span:last-child,
+  .viewport-deck .about[data-origin-intro=running] .origin-band-head span:last-child{bottom:clamp(28px,6svh,54px)}
+  .viewport-deck .about[data-origin-intro=settling] .origin-band-head span{transition:top 1.8s cubic-bezier(.22,.75,.2,1),bottom 1.8s cubic-bezier(.22,.75,.2,1)}
+}
+
