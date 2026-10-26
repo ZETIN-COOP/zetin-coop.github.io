@@ -40,11 +40,11 @@ h1,h2,h3,h4,p{margin-top:0}
 .hero h1.is-animated>span:last-child .hero-infinity{opacity:0}
 .hero h1.is-animated.is-visible>span>span:not(.hero-rule){animation:hero-word-enter 1.05s cubic-bezier(.2,.75,.2,1) both}
 .hero h1.is-animated.is-visible>span:last-child>span:not(.hero-rule){animation-delay:.16s}
-.hero h1.is-animated.is-visible>span:first-child>.hero-rule:before{animation:hero-track-draw 1.55s cubic-bezier(.55,0,.35,1) .32s both}
-.hero h1.is-animated.is-visible>span:first-child .hero-line-tracer{animation:hero-tracer-run 1.55s cubic-bezier(.55,0,.35,1) .32s both}
-.hero h1.is-animated.is-visible>span:last-child>.hero-rule:before{animation:hero-track-draw 1.55s cubic-bezier(.55,0,.35,1) 1.9s both}
-.hero h1.is-animated.is-visible>span:last-child .hero-line-tracer-return{animation:hero-tracer-return 1.55s cubic-bezier(.55,0,.35,1) 1.9s both}
-.hero h1.is-animated.is-visible>span:last-child .hero-infinity{animation:hero-infinity-reveal .34s ease 2.6s both}
+.hero h1.is-animated.is-tracing>span:first-child>.hero-rule:before{animation:hero-track-draw 1.55s cubic-bezier(.55,0,.35,1) .32s both}
+.hero h1.is-animated.is-tracing>span:first-child .hero-line-tracer{animation:hero-tracer-run 1.55s cubic-bezier(.55,0,.35,1) .32s both}
+.hero h1.is-animated.is-tracing>span:last-child>.hero-rule:before{animation:hero-track-draw 1.55s cubic-bezier(.55,0,.35,1) 1.9s both}
+.hero h1.is-animated.is-tracing>span:last-child .hero-line-tracer-return{animation:hero-tracer-return 1.55s cubic-bezier(.55,0,.35,1) 1.9s both}
+.hero h1.is-animated.is-tracing>span:last-child .hero-infinity{animation:hero-infinity-reveal .34s ease 2.6s both}
 @keyframes hero-word-enter{from{opacity:0;transform:translate3d(var(--entry-x),8px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
 @keyframes hero-track-draw{from{transform:scaleX(0)}90%,to{transform:scaleX(1)}}
 @keyframes hero-tracer-run{from{left:0;opacity:0}8%{opacity:1}90%{left:calc(100% + 4px);opacity:1}to{left:calc(100% + 4px);opacity:0}}
@@ -200,7 +200,7 @@ h1,h2,h3,h4,p{margin-top:0}
   .hero h1{font-size:clamp(145px,24vh,205px)}
   .hero h1>span:last-child{margin-top:clamp(24px,4vh,32px)}
 }
-@media(prefers-reduced-motion:reduce){.hero h1.is-animated>span>span{opacity:1;transform:none}.hero h1.is-animated.is-visible>span>span,.hero h1.is-animated.is-visible>span>.hero-rule:before,.hero h1.is-animated.is-visible>span .hero-line-tracer,.hero h1.is-animated.is-visible>span .hero-infinity{animation:none!important}.hero h1.is-animated>span>.hero-rule:before{transform:none}.hero h1.is-animated>span:first-child .hero-line-tracer{left:calc(100% - var(--tracer-width));opacity:0}.hero h1.is-animated>span:last-child .hero-line-tracer-return{left:calc(100% - var(--tracer-width));opacity:0}.hero h1.is-animated>span:last-child .hero-infinity{opacity:var(--infinity-opacity,.16)}}
+@media(prefers-reduced-motion:reduce){.hero h1.is-animated>span>span{opacity:1;transform:none}.hero h1.is-animated.is-visible>span>span,.hero h1.is-animated.is-tracing>span>.hero-rule:before,.hero h1.is-animated.is-tracing>span .hero-line-tracer,.hero h1.is-animated.is-tracing>span .hero-infinity{animation:none!important}.hero h1.is-animated>span>.hero-rule:before{transform:none}.hero h1.is-animated>span:first-child .hero-line-tracer{left:calc(100% - var(--tracer-width));opacity:0}.hero h1.is-animated>span:last-child .hero-line-tracer-return{left:calc(100% - var(--tracer-width));opacity:0}.hero h1.is-animated>span:last-child .hero-infinity{opacity:var(--infinity-opacity,.16)}}
 
 /* Give the large headlines one consistent, readable tracking. */
 :root{--tracking-headline:-.035em;--tracking-copy:-.015em}

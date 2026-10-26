@@ -456,12 +456,13 @@ if (heroTitle) {
   heroTitle.classList.add('is-animated');
   if ('IntersectionObserver' in window) {
     const titleObserver = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting) return;
-      heroTitle.classList.add('is-visible');
-      titleObserver.unobserve(entry.target);
-    }, { threshold: 0.25 });
+      const visible = entry.isIntersecting && entry.intersectionRatio >= .5;
+      heroTitle.classList.toggle('is-tracing', visible);
+      if (visible) heroTitle.classList.add('is-visible');
+    }, { threshold: [0, .5] });
     titleObserver.observe(document.querySelector('.hero'));
   } else {
     heroTitle.classList.add('is-visible');
+    heroTitle.classList.add('is-tracing');
   }
 }
