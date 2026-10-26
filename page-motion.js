@@ -19,8 +19,8 @@
   const travelTo = (target) => {
     stopJourney();
     const start = window.scrollY;
-    const headerHeight = document.querySelector('.site-header')?.offsetHeight || 68;
-    const destination = target === panels[0] ? 0 : Math.max(0, start + target.getBoundingClientRect().top - headerHeight);
+    const destinationFor = () => target === panels[0] ? 0 : Math.max(0, window.scrollY + target.getBoundingClientRect().top - (document.querySelector('.site-header')?.offsetHeight || 68));
+    const destination = destinationFor();
     root.classList.add('is-section-traveling');
     if (reducedMotion.matches || Math.abs(destination - start) < 1) {
       window.scrollTo({top:destination, behavior:'auto'});
@@ -32,9 +32,12 @@
       if (startedAt === null) startedAt = now;
       const progress = Math.min((now - startedAt) / journeyDurationMs, 1);
       const eased = (1 - Math.cos(Math.PI * progress)) / 2;
-      window.scrollTo({top:start + (destination - start) * eased, behavior:'auto'});
+      window.scrollTo({top:start + (destinationFor() - start) * eased, behavior:'auto'});
       if (progress < 1) journeyFrame = requestAnimationFrame(advance);
-      else stopJourney();
+      else journeyFrame = requestAnimationFrame(() => {
+        window.scrollTo({top:destinationFor(), behavior:'auto'});
+        stopJourney();
+      });
     };
     journeyFrame = requestAnimationFrame(advance);
   };
@@ -132,7 +135,6 @@
     if (['ArrowUp','ArrowDown','PageUp','PageDown','Home','End',' '].includes(event.key)) stopJourney();
   });
   window.addEventListener('popstate', stopJourney);
-  window.addEventListener('resize', stopJourney, {passive:true});
   document.addEventListener('scroll', schedule, {passive:true, capture:true});
   window.addEventListener('resize', layout, {passive:true});
   window.addEventListener('pageshow', layout);

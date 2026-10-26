@@ -321,7 +321,7 @@ html.viewport-deck{
 .viewport-deck .robot-marquee{display:block;flex:1;min-height:0;overflow:hidden;width:calc(100% + 2 * var(--panel-gutter));max-width:none;margin:0 calc(-1 * var(--panel-gutter));border:0;touch-action:pan-y}
 .viewport-deck .robot-marquee .robot-track{display:flex;width:max-content;height:100%;gap:24px;animation:robot-marquee var(--marquee-duration,60s) linear infinite;animation-play-state:paused;will-change:transform}
 .viewport-deck .robot-marquee.is-marquee-running .robot-track{animation-play-state:running}
-.viewport-deck .robot-marquee:hover .robot-track{animation-play-state:paused}
+@media(hover:hover) and (pointer:fine){.viewport-deck .robot-marquee:hover .robot-track{animation-play-state:paused}}
 .robot-marquee-group{display:flex;gap:24px;height:100%;flex:none}
 .viewport-deck .robot-marquee .robot-row{display:flex;flex:0 0 clamp(320px,32vw,520px);width:clamp(320px,32vw,520px);height:100%;min-height:0;flex-direction:column;background:var(--paper);color:var(--ink);border:0;overflow:hidden}
 .viewport-deck .robot-marquee .robot-visual{flex:1;min-height:100px;width:100%;height:auto;background:#303030;overflow:hidden}
@@ -588,6 +588,28 @@ html[lang=en] .contact h2,html[lang=en] .section-content h2{word-break:normal;ov
   .viewport-deck .approach-grid article{grid-template-columns:20px minmax(0,1fr);grid-template-rows:auto auto;align-items:start;align-content:start;gap:8px 10px}
   .viewport-deck .approach-grid p{grid-column:1 / -1}
 }
+
+/* Manual browsing shares the existing marquee playhead. */
+.marquee-browse{display:flex;align-items:center;gap:10px;flex:none}
+.marquee-step{display:grid;place-items:center;width:34px;height:34px;border:1px solid var(--line-light);background:transparent;color:var(--paper);font:400 20px/1 'DM Sans',sans-serif;cursor:pointer;transition:background .2s,color .2s}
+.marquee-step:hover{background:var(--paper);color:var(--ink)}
+.marquee-step:focus-visible{outline:1px solid var(--paper);outline-offset:4px}
+.viewport-deck .robot-marquee .robot-open{cursor:grab}
+.robot-open-label{cursor:pointer}
+.viewport-deck .robot-marquee.is-dragging,
+.viewport-deck .robot-marquee.is-dragging *{cursor:grabbing!important;user-select:none}
+.viewport-deck .about.origin-copy-seen[data-origin-intro=settling] .section-label,
+.viewport-deck .about.origin-copy-seen[data-origin-intro=settling] .section-overline,
+.viewport-deck .about.origin-copy-seen[data-origin-intro=settling] h2,
+.viewport-deck .about.origin-copy-seen[data-origin-intro=settling] .about-copy p{animation:none}
+.viewport-deck .about.origin-copy-seen[data-origin-intro=settling] .section-grid{transform:none;transition:opacity .45s ease;transition-delay:.15s}
+@media(max-width:760px){
+  .marquee-toolbar{gap:8px}
+  .marquee-browse{gap:6px}
+  .marquee-step{width:30px;height:30px;font-size:18px}
+  .marquee-browse .marquee-toggle{padding-left:6px}
+}
+@media(max-width:380px){.marquee-toolbar .robot-detail-entry{font-size:7px;letter-spacing:.03em}}
 @media(max-width:760px) and (max-height:700px) and (orientation:portrait){
   .viewport-deck .approach .panel-content{gap:16px}
   .viewport-deck .approach-grid{row-gap:8px}

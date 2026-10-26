@@ -128,6 +128,7 @@ if (robotList && marqueeToggle) {
     syncPlayback();
   };
   robotList.addEventListener('click', event => {
+    if (performance.now() < suppressCardClickUntil) { event.preventDefault(); return; }
     const button = event.target.closest('.robot-open');
     if (button) openDetail(Number(button.dataset.robotIndex), button);
   });
@@ -161,8 +162,12 @@ if (robotList && marqueeToggle) {
   });
   let userPaused = false;
   let visible = false;
+  let manualPaused = false;
+  let dragState = null;
+  let manualResumeTimer = 0;
+  let suppressCardClickUntil = 0;
   const syncPlayback = () => {
-    robotList.classList.toggle('is-marquee-running', visible && !document.hidden && !userPaused && !dialog.open);
+    robotList.classList.toggle('is-marquee-running', visible && !document.hidden && !userPaused && !manualPaused && !dialog.open);
     marqueeToggle.setAttribute('aria-label', isEnglish ? (userPaused ? 'Play robot marquee' : 'Pause robot marquee') : (userPaused ? '로봇 자동 흐름 재생' : '로봇 자동 흐름 일시정지'));
     marqueeToggle.querySelector('[data-marquee-label]').textContent = userPaused ? 'PLAY' : 'PAUSE';
     marqueeToggle.querySelector('[data-marquee-icon]').textContent = userPaused ? '▷' : 'Ⅱ';
@@ -172,8 +177,86 @@ if (robotList && marqueeToggle) {
     track.style.setProperty('--marquee-distance', `${distance}px`);
     track.style.setProperty('--marquee-duration', `${distance / 48}s`);
   };
-  marqueeToggle.addEventListener('click', () => { userPaused = !userPaused; syncPlayback(); });
-  document.addEventListener('visibilitychange', syncPlayback);
+  const pauseAfterInteraction = () => {
+    clearTimeout(manualResumeTimer);
+    manualPaused = true;
+    syncPlayback();
+    manualResumeTimer = window.setTimeout(() => { manualPaused = false; syncPlayback(); }, 3000);
+  };
+  const motion = () => {
+    const animation = track.getAnimations()[0];
+    const distance = Number.parseFloat(getComputedStyle(track).getPropertyValue('--marquee-distance'));
+    const duration = Number.parseFloat(getComputedStyle(track).animationDuration) * 1000;
+    return animation && distance > 0 && duration > 0 ? {animation,distance,duration} : null;
+  };
+  const setPlayhead = (animation, time, duration) => { animation.currentTime = ((time % duration) + duration) % duration; };
+  const finishDrag = (event) => {
+    if (!dragState || (event && event.pointerId !== dragState.id)) return;
+    const dragged = dragState.dragged;
+    const pointerId = dragState.id;
+    dragState = null;
+    if (robotList.hasPointerCapture?.(pointerId)) robotList.releasePointerCapture(pointerId);
+    robotList.classList.remove('is-dragging');
+    if (dragged) {
+      suppressCardClickUntil = performance.now() + 400;
+      pauseAfterInteraction();
+    } else { manualPaused = false; syncPlayback(); }
+  };
+  robotList.addEventListener('pointerdown', event => {
+    if (!event.isPrimary || event.button !== 0) return;
+    const current = motion();
+    if (!current) return;
+    clearTimeout(manualResumeTimer);
+    dragState = {...current,id:event.pointerId,x:event.clientX,y:event.clientY,time:Number(current.animation.currentTime) || 0,dragged:false};
+    manualPaused = true;
+    syncPlayback();
+  });
+  robotList.addEventListener('pointermove', event => {
+    if (!dragState || dragState.id !== event.pointerId) return;
+    const dx = event.clientX - dragState.x;
+    const dy = event.clientY - dragState.y;
+    if (!dragState.dragged) {
+      if (Math.abs(dx) < 8 || Math.abs(dx) <= Math.abs(dy)) return;
+      dragState.dragged = true;
+      robotList.setPointerCapture?.(event.pointerId);
+      robotList.classList.add('is-dragging');
+    }
+    if (event.cancelable) event.preventDefault();
+    setPlayhead(dragState.animation, dragState.time - dx / dragState.distance * dragState.duration, dragState.duration);
+  }, {passive:false});
+  window.addEventListener('pointerup', finishDrag);
+  window.addEventListener('pointercancel', finishDrag);
+  window.addEventListener('blur', () => finishDrag());
+  robotList.addEventListener('pointerleave', event => { if (dragState && !dragState.dragged) finishDrag(event); });
+  robotList.addEventListener('lostpointercapture', event => { if (event.target === robotList) finishDrag(event); });
+  robotList.addEventListener('dragstart', event => event.preventDefault());
+  const browseControls = document.createElement('div');
+  browseControls.className = 'marquee-browse';
+  [-1, 1].forEach(direction => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'marquee-step';
+    button.textContent = direction < 0 ? '←' : '→';
+    button.setAttribute('aria-label', isEnglish ? (direction < 0 ? 'Previous robot' : 'Next robot') : (direction < 0 ? '이전 로봇' : '다음 로봇'));
+    button.setAttribute('aria-controls', robotList.id);
+    button.addEventListener('click', () => {
+      const stride = Number.parseFloat(getComputedStyle(projects[0]).width) + Number.parseFloat(getComputedStyle(group).gap);
+      const current = motion();
+      if (current) {
+        pauseAfterInteraction();
+        setPlayhead(current.animation, (Number(current.animation.currentTime) || 0) + direction * stride / current.distance * current.duration, current.duration);
+      } else robotList.scrollBy({left:direction * stride,behavior:'auto'});
+    });
+    browseControls.append(button);
+  });
+  marqueeToggle.parentElement.append(browseControls);
+  browseControls.append(marqueeToggle);
+  marqueeToggle.addEventListener('click', () => {
+    userPaused = !userPaused;
+    if (!userPaused) { clearTimeout(manualResumeTimer); manualPaused = false; }
+    syncPlayback();
+  });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) finishDrag(); syncPlayback(); });
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; syncPlayback(); }, {threshold:.1}).observe(robotList);
   } else { visible = true; syncPlayback(); }
@@ -239,11 +322,13 @@ if (originBand && originPath && originTracer) {
   };
   const finishIntro = (animate = false) => {
     if (introState === 'done') return;
+    const copyWasOpening = introState === 'settling';
     clearTimeout(introTimer);
     const complete = () => {
       introState = 'done';
       delete aboutPanel.dataset.originIntro;
       aboutPanel.classList.remove('origin-intro-prepared');
+      if (animate || copyWasOpening) aboutPanel.classList.add('origin-copy-seen');
       cycleStartedAt = 0;
       document.dispatchEvent(new Event('originintroend'));
     };
@@ -354,7 +439,10 @@ if ('IntersectionObserver' in window) {
   const revealTargets = document.querySelectorAll('.about .section-label, .about .section-overline, .about h2, .about-copy p, .origin-band, .robots .section-label, .robots .section-overline, .robots h2, .robots-lead, .robot-list, .approach .section-label, .approach .section-overline, .approach h2, .approach-lead, .approach-grid article, .contact .section-label, .contact-intro, .inquiry-form, .club .section-label, .club h2, .club-bottom');
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      entry.target.classList.toggle('is-visible', entry.isIntersecting);
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        revealObserver.unobserve(entry.target);
+      }
     });
   }, { threshold: 0, rootMargin: '40px 0px 40px 0px' });
   revealTargets.forEach((target) => {
@@ -367,9 +455,12 @@ const heroTitle = document.getElementById('hero-title');
 if (heroTitle) {
   heroTitle.classList.add('is-animated');
   if ('IntersectionObserver' in window) {
-    new IntersectionObserver(([entry]) => {
-      heroTitle.classList.toggle('is-visible', entry.isIntersecting);
-    }, { threshold: 0.25 }).observe(document.querySelector('.hero'));
+    const titleObserver = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      heroTitle.classList.add('is-visible');
+      titleObserver.unobserve(entry.target);
+    }, { threshold: 0.25 });
+    titleObserver.observe(document.querySelector('.hero'));
   } else {
     heroTitle.classList.add('is-visible');
   }
