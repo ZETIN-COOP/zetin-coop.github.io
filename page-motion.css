@@ -620,6 +620,7 @@ html[lang=en] .contact h2,html[lang=en] .section-content h2{word-break:normal;ov
 .viewport-deck .robot-marquee .robot-visual.robot-render{background:var(--paper)}
 .viewport-deck .robot-marquee .robot-visual.robot-render:after{display:none}
 .viewport-deck .robot-marquee .robot-visual.robot-render img{object-fit:contain;object-position:center;filter:none;padding:12px}
+.viewport-deck .robot-marquee .robot-visual.robot-render-tracer img{padding:4px}
 .viewport-deck .robot-marquee .robot-visual .robot-render-crop{position:absolute;inset:0;width:100%;height:100%;max-width:none;fill:none;stroke:none;filter:none;overflow:hidden}
 .viewport-deck .robot-marquee .robot-visual.robot-render-sammy img{inset:auto;left:50%;top:50%;width:340%;height:134%;padding:0;object-fit:contain;object-position:center;transform:translate(-50%,-44%)}
 @media(max-height:500px) and (orientation:landscape){
@@ -662,6 +663,7 @@ html.robot-detail-open{overflow:hidden;scrollbar-gutter:stable}
 .robot-detail-image .robot-visual:after{display:none}
 .robot-detail-image img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transform:none;filter:none}
 .robot-detail-image .robot-render img{object-fit:contain}
+.robot-detail-image .robot-render-tracer img{padding:16px}
 .robot-detail-image .robot-render-sammy img{inset:auto;left:50%;top:50%;width:340%;height:134%;object-fit:contain;transform:translate(-50%,-44%)}
 .robot-detail-image .robot-render-crop{position:absolute;inset:0;width:100%;height:100%;max-width:none;fill:none;stroke:none;overflow:hidden}
 .robot-detail-image .robot-render-window{width:100%;height:100%;max-width:none;fill:none;stroke:none;overflow:hidden}
