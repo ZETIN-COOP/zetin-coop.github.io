@@ -629,6 +629,14 @@ html[lang=en] .contact h2,html[lang=en] .section-content h2{word-break:normal;ov
 .viewport-deck .robot-marquee .robot-visual .robot-render-crop.robot-render-face{inset:0;width:100%;height:100%}
 .viewport-deck .robot-marquee .robot-visual .robot-render-window{width:100%;height:100%;max-width:none;stroke:none;fill:none;overflow:hidden}
 
+/* Enlarge the complete image; only the card edge frames the portrait. */
+.viewport-deck .robot-marquee .robot-visual .robot-render-crop.robot-portrait{inset:auto;left:50%;top:0;width:auto;height:var(--portrait-height);aspect-ratio:var(--portrait-ratio);transform:translateX(-50%)}
+.robot-portrait-campi{--portrait-height:460%;--portrait-ratio:916 / 1716}
+.robot-portrait-sammy{--portrait-height:135%;--portrait-ratio:580 / 600}
+.robot-portrait-buzzer{--portrait-height:165%;--portrait-ratio:1086 / 724}
+.robot-portrait-ddungi{--portrait-height:180%;--portrait-ratio:1114 / 942}
+.viewport-deck .robot-marquee .robot-visual .robot-render-crop.robot-portrait-hound{width:150%;height:auto;aspect-ratio:1792 / 877;top:100%;transform:translate(-50%,-40%)}
+
 /* The moving platforms open a shared, readable detail view. */
 .robot-open{position:absolute;inset:0;z-index:6;border:0;padding:0;background:transparent;color:var(--ink);cursor:pointer}
 .robot-open-label{position:absolute;top:16px;right:16px;border:1px solid var(--ink);padding:8px 10px;background:var(--paper);font:700 10px/1.2 'DM Sans','Noto Sans KR',sans-serif;letter-spacing:.04em;transition:background .25s,color .25s}
