@@ -89,6 +89,15 @@ if (robotList && marqueeToggle) {
     dialog.querySelector('.robot-detail-description').textContent = project.querySelector('.robot-description').textContent;
     const visual = project.querySelector('.robot-visual').cloneNode(true);
     visual.querySelectorAll('span').forEach(span => span.remove());
+    const fullShot = visual.querySelector('[data-detail-window]');
+    if (fullShot) {
+      const [x, y, width, height] = fullShot.dataset.detailWindow.split(' ');
+      fullShot.setAttribute('viewBox', `0 0 ${width} ${height}`);
+      const window = fullShot.querySelector('.robot-render-window');
+      window.setAttribute('viewBox', `${x} ${y} ${width} ${height}`);
+      window.setAttribute('width', width);
+      window.setAttribute('height', height);
+    }
     detailImage.replaceChildren(visual);
     detailSections.replaceChildren();
     project.querySelectorAll('.robot-meta > div').forEach(meta => {
