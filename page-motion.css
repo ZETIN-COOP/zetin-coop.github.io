@@ -219,6 +219,11 @@ html.viewport-deck{
 .viewport-deck #main>.club{border-top:0}
 .viewport-deck .section-overline,.viewport-deck .robots .section-overline,.viewport-deck .club-inner>div:nth-child(2)>p{font-size:10px;line-height:1.4;margin:0 0 clamp(9px,1.5svh,18px)}
 html.viewport-deck.is-section-traveling{scroll-behavior:auto!important;scroll-snap-type:none!important}
+/* Mouse/trackpad input remains continuous instead of snapping to a whole scene. */
+@media(hover:hover) and (pointer:fine){
+  html.viewport-deck{scroll-snap-type:none;scroll-behavior:auto}
+  .viewport-deck #main>section{scroll-snap-stop:normal}
+}
 @media(max-width:760px){
   .viewport-deck .section-label,.viewport-deck .robots .section-label{margin-bottom:12px}
   .viewport-deck .section-overline,.viewport-deck .robots .section-overline,.viewport-deck .club-inner>div:nth-child(2)>p{font-size:9px;margin-bottom:8px}
